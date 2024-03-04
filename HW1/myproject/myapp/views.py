@@ -1,5 +1,7 @@
 import logging
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import Client, Product, Order
 
 
 logger = logging.getLogger(__name__)
@@ -19,3 +21,33 @@ def about(request):
     """
     logger.info('Посещена страница "О себе"')
     return render(request, 'myapp/about.html', {'html': html})
+
+def create_client(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        address = request.POST.get('address')
+        
+        client = Client.objects.create(name=name, email=email, phone_number=phone_number, address=address)
+        return JsonResponse({'message': 'Клиент успешно создан'})
+        
+def get_client(request, client_id):
+    client = get_object_or_404(Client, pk=client_id)
+    return JsonResponse({'name': client.name, 'email': client.email, 'phone_number': client.phone_number, 'address': client.address})
+
+def update_product(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, pk=product_id)
+        product.name = request.POST.get('name')
+        product.description = request.POST.get('description')
+        product.price = request.POST.get('price')
+        product.quantity = request.POST.get('quantity')
+        product.save()
+        return JsonResponse({'message': 'Товар успешно обновлен'})
+
+
+def delete_order(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    order.delete()
+    return JsonResponse({'message': 'Заказ удален'})
