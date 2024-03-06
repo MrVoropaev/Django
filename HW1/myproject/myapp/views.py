@@ -1,4 +1,6 @@
 import logging
+from django.shortcuts import render
+from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Client, Product, Order
@@ -51,3 +53,12 @@ def delete_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     order.delete()
     return JsonResponse({'message': 'Заказ удален'})
+
+def client_orders_list(request, client_id):
+    client_orders_last_7_days = Order.objects.filter(client_id=client_id, created_at__gte=timezone.now()-timezone.timedelta(days=7)).distinct()
+    client_orders_last_30_days = Order.objects.filter(client_id=client_id, created_at__gte=timezone.now()-timezone.timedelta(days=30)).distinct()
+    client_orders_last_365_days = Order.objects.filter(client_id=client_id, created_at__gte=timezone.now()-timezone.timedelta(days=365)).distinct()
+    
+    return render(request, 'client_orders_list.html', {'client_orders_last_7_days': client_orders_last_7_days,
+                                                        'client_orders_last_30_days': client_orders_last_30_days,
+                                                        'client_orders_last_365_days': client_orders_last_365_days})
