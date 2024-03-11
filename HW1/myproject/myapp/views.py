@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Client, Product, Order
+from forms import ProductForm
 
 
 logger = logging.getLogger(__name__)
@@ -62,3 +63,17 @@ def client_orders_list(request, client_id):
     return render(request, 'client_orders_list.html', {'client_orders_last_7_days': client_orders_last_7_days,
                                                         'client_orders_last_30_days': client_orders_last_30_days,
                                                         'client_orders_last_365_days': client_orders_last_365_days})
+
+
+def upload_product_photo(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Обработка загрузки фото продукта
+            photo = request.FILES['photo']
+            # Дополнительная логика обработки загруженного фото
+            return JsonResponse({'message': 'Фото продукта успешно загружено'})
+    else:
+        form = ProductForm()
+    return render(request, 'upload_product_photo.html', {'form': form})
+
