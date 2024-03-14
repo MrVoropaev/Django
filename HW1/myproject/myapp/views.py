@@ -77,3 +77,15 @@ def upload_product_photo(request):
         form = ProductForm()
     return render(request, 'upload_product_photo.html', {'form': form})
 
+def client_detail(request, client_id):
+    client = Client.objects.get(pk=client_id)
+    return render(request, 'client_detail.html', {'client': client})
+
+def product_detail(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    return render(request, 'product_detail.html', {'product': product})
+
+def order_detail(request, order_id):
+    order = Order.objects.get(pk=order_id)
+    return render(request, 'order_detail.html', {'order': order})
+
