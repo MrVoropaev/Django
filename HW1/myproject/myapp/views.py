@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Client, Product, Order
-from forms import ProductForm
+from myapp.forms import ProductForm
 
 
 logger = logging.getLogger(__name__)
@@ -88,4 +88,7 @@ def product_detail(request, product_id):
 def order_detail(request, order_id):
     order = Order.objects.get(pk=order_id)
     return render(request, 'order_detail.html', {'order': order})
+
+def home(request):
+    return render(request, 'home.html')
 

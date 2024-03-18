@@ -30,3 +30,8 @@ urlpatterns = [
     path('', include('myapp.urls')),
 ]
 
+urlpatterns = [
+    path('', views.home, name='home'),  # Добавьте эту строку
+    path('admin/', admin.site.urls),
+    path('client_orders/<int:client_id>/', views.client_orders_list, name='client_orders_list'),
+]

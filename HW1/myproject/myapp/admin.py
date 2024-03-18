@@ -30,7 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'client', 'total_amount', 'order_date', 'product_list')
     search_fields = ('client__name', 'total_amount')
-    list_filter = ('order_date',)  
+    list_filter = ('order_date',)
 
     def product_list(self, obj):
         return ", ".join([product.name for product in obj.products.all()])  
